@@ -33,20 +33,16 @@ struct LoggerConfiguration {
 let globalSwell = Swell();
 
 
-@objc
 public class Swell {
     
-    lazy var swellLogger: Logger = {
-        let result = getLogger("Shared")
-        return result
-        }()
-    
+    var swellLogger: Logger!;
     var selector = LogSelector()
     var allLoggers = Dictionary<String, Logger>()
     var rootConfiguration = LoggerConfiguration(name: "ROOT")
     var sharedConfiguration = LoggerConfiguration(name: "Shared")
     var allConfigurations = Dictionary<String, LoggerConfiguration>()
     var enabled = true;
+    
     
     init() {
         // This configuration is used by the shared logger
@@ -59,8 +55,24 @@ public class Swell {
         rootConfiguration.level = LogLevel.TRACE
         rootConfiguration.locations += [ConsoleLocation.getInstance()]
         
+        /**
+         We'll just make sure to create every log level
+         */
+        LogLevel.DEBUG
+        LogLevel.INFO
+        LogLevel.TRACE
+        LogLevel.WARN
+        LogLevel.ERROR
+        LogLevel.SEVERE
+        
         readConfigurationFile()
     }
+    
+    func initInternalLogger() {
+        //swellLogger = Logger(name: "SHARED", formatter: QuickFormatter(format: .LevelMessage))
+        swellLogger = getLogger("Shared")
+    }
+    
     
     
     
@@ -68,50 +80,86 @@ public class Swell {
     // Global/convenience log methods used for quick logging
     
     public class func trace<T>(@autoclosure message: () -> T) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.trace(message)
     }
     
     public class func debug<T>(@autoclosure message: () -> T) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.debug(message)
     }
     
     public class func info<T>(@autoclosure message: () -> T) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.info(message)
     }
     
     public class func warn<T>(@autoclosure message: () -> T) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.warn(message)
     }
     
     public class func error<T>(@autoclosure message: () -> T) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.error(message)
     }
     
     public class func severe<T>(@autoclosure message: () -> T) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.severe(message)
     }
     
     public class func trace(fn: () -> String) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.trace(fn())
     }
     
     public class func debug(fn: () -> String) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.debug(fn())
     }
     
     public class func info(fn: () -> String) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.info(fn())
     }
     
     public class func warn(fn: () -> String) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.warn(fn())
     }
     
     public class func error(fn: () -> String) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.error(fn())
     }
     
     public class func severe(fn: () -> String) {
+        if globalSwell.swellLogger == nil {
+            globalSwell.initInternalLogger()
+        }
         globalSwell.swellLogger.severe(fn())
     }
     
@@ -132,20 +180,16 @@ public class Swell {
     }
     
     
-    //====================================================================================================
-    // Internal methods serving the public methods
-    
-    
     func disableLogging() {
         enabled = false
-        for (key, value) in allLoggers {
+        for (_, value) in allLoggers {
             value.enabled = false
         }
     }
     
     func enableLogging() {
         enabled = true
-        for (key, value) in allLoggers {
+        for (_, value) in allLoggers {
             value.enabled = selector.shouldEnable(value)
         }
     }
@@ -169,7 +213,7 @@ public class Swell {
     /// Returns the Logger instance configured for a given logger name.
     /// Use this to get Logger instances for use in classes.
     func getLogger(name: String) -> Logger {
-        var logger = allLoggers[name]
+        let logger = allLoggers[name]
         if (logger != nil) {
             return logger!
         } else {
@@ -184,11 +228,11 @@ public class Swell {
     /// Use getLogger(name) to get a logger for normal use.
     func createLogger(name: String) -> Logger {
         let config = getConfigurationForLoggerName(name)
-        var result = Logger(name: name, level: config.level!, formatter: config.formatter!, logLocation: config.locations[0])
+        let result = Logger(name: name, level: config.level!, formatter: config.formatter!, logLocation: config.locations[0])
         
         // Now we need to handle potentially > 1 locations
         if config.locations.count > 1 {
-            for (index,location) in enumerate(config.locations) {
+            for (index,location) in config.locations.enumerate() {
                 if (index > 0) {
                     result.locations += [location]
                 }
@@ -256,8 +300,15 @@ public class Swell {
     // Methods for reading the Swell.plist file
     
     func readConfigurationFile() {
-        
         var filename: String? = NSBundle.mainBundle().pathForResource("Swell", ofType: "plist");
+        if filename == nil {
+            for bundle in NSBundle.allBundles() {
+                filename = bundle.pathForResource("Swell", ofType: "plist");
+                if (filename != nil) {
+                    break
+                }
+            }
+        }
         
         var dict: NSDictionary? = nil;
         if let bundleFilename = filename {
@@ -267,7 +318,7 @@ public class Swell {
             
             //-----------------------------------------------------------------
             // Read the root configuration
-            var configuration = readLoggerPList("ROOT", map: map);
+            let configuration = readLoggerPList("ROOT", map: map);
             //Swell.info("map: \(map)");
             
             // Now any values configured, we put in our root configuration
@@ -288,7 +339,7 @@ public class Swell {
                 if (!key.hasPrefix("SWL")) {
                     let value: AnyObject? = map[key]
                     if let submap: Dictionary<String, AnyObject> = value as? Dictionary<String, AnyObject> {
-                        var subconfig = readLoggerPList(key, map: submap)
+                        let subconfig = readLoggerPList(key, map: submap)
                         applyLoggerConfiguration(key, configuration: subconfig)
                     }
                 }
@@ -326,36 +377,36 @@ public class Swell {
     ///     configureLogger("MyClass", level: LogLevel.INFO, location: ConsoleLocation())
     ///  then the resulting configuration for MyClass would have MyCustomFormatter, ConsoleLocation, and LogLevel.INFO.
     func configureLogger(loggerName: String,
-        level givenLevel: LogLevel? = nil,
-        formatter givenFormatter: LogFormatter? = nil,
-        location givenLocation: LogLocation? = nil) {
-            
-            var oldConfiguration: LoggerConfiguration?
-            if allConfigurations.indexForKey(loggerName) != nil {
-                oldConfiguration = allConfigurations[loggerName]
-            }
-            
-            var newConfiguration = LoggerConfiguration(name: loggerName)
-            
-            if let level = givenLevel {
-                newConfiguration.level = level
-            } else if let level = oldConfiguration?.level {
-                newConfiguration.level = level
-            }
-            
-            if let formatter = givenFormatter {
-                newConfiguration.formatter = formatter
-            } else if let formatter = oldConfiguration?.formatter {
-                newConfiguration.formatter = formatter
-            }
-            
-            if let location = givenLocation {
-                newConfiguration.locations += [location]
-            } else if oldConfiguration?.locations.count > 0 {
-                newConfiguration.locations = oldConfiguration!.locations
-            }
-            
-            applyLoggerConfiguration(loggerName, configuration: newConfiguration)
+                         level givenLevel: LogLevel? = nil,
+                               formatter givenFormatter: LogFormatter? = nil,
+                                         location givenLocation: LogLocation? = nil) {
+        
+        var oldConfiguration: LoggerConfiguration?
+        if allConfigurations.indexForKey(loggerName) != nil {
+            oldConfiguration = allConfigurations[loggerName]
+        }
+        
+        var newConfiguration = LoggerConfiguration(name: loggerName)
+        
+        if let level = givenLevel {
+            newConfiguration.level = level
+        } else if let level = oldConfiguration?.level {
+            newConfiguration.level = level
+        }
+        
+        if let formatter = givenFormatter {
+            newConfiguration.formatter = formatter
+        } else if let formatter = oldConfiguration?.formatter {
+            newConfiguration.formatter = formatter
+        }
+        
+        if let location = givenLocation {
+            newConfiguration.locations += [location]
+        } else if oldConfiguration?.locations.count > 0 {
+            newConfiguration.locations = oldConfiguration!.locations
+        }
+        
+        applyLoggerConfiguration(loggerName, configuration: newConfiguration)
     }
     
     
@@ -387,9 +438,6 @@ public class Swell {
     
     
     func readLoggerPList(loggerName: String, map: Dictionary<String, AnyObject>) -> LoggerConfiguration {
-        var level: LogLevel?
-        var formatter: LogFormatter?
-        var location: LogLocation?
         var configuration = LoggerConfiguration(name: loggerName)
         var item: AnyObject? = nil
         // Set the LogLevel
@@ -412,8 +460,14 @@ public class Swell {
                 configuration.formatter = getConfiguredFlexFormatter(configuration, item: value);
             } else {
                 let formatKey = getFormatKey(map)
-                println("formatKey=\(formatKey)")
+                print("formatKey=\(formatKey)")
             }
+        }
+        
+        // Set a custom date formatter.
+        item = map["SWLDateFormatter"]
+        if let value: AnyObject = item {
+            configuration.formatter?.dateFormatter = getConfiguredDateFormatter(value)
         }
         
         // Set the location for the logs
@@ -428,7 +482,7 @@ public class Swell {
     
     func getConfiguredQuickFormatter(configuration: LoggerConfiguration, item: AnyObject) -> LogFormatter? {
         if let formatString: String = item as? String {
-            var formatter = QuickFormatter.logFormatterForString(formatString)
+            let formatter = QuickFormatter.logFormatterForString(formatString)
             return formatter
         }
         return nil
@@ -436,7 +490,7 @@ public class Swell {
     
     func getConfiguredFlexFormatter(configuration: LoggerConfiguration, item: AnyObject) -> LogFormatter? {
         if let formatString: String = item as? String {
-            var formatter = FlexFormatter.logFormatterForString(formatString);
+            let formatter = FlexFormatter.logFormatterForString(formatString);
             return formatter
         }
         return nil
@@ -444,47 +498,65 @@ public class Swell {
     
     func getConfiguredFileLocation(configuration: LoggerConfiguration, item: AnyObject) -> LogLocation? {
         if let filename: String = item as? String {
-            var logLocation = FileLocation.getInstance(filename);
+            let logLocation = FileLocation.getInstance(filename);
             return logLocation
         }
         return nil
     }
     
     func getConfiguredLocations(configuration: LoggerConfiguration, item: AnyObject,
-        map: Dictionary<String, AnyObject>) -> [LogLocation] {
-            var results = [LogLocation]()
-            if let configuredValue: String = item as? String {
-                // configuredValue is the raw value in the plist
-                
-                // values is the array from configuredValue
-                let values = configuredValue.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                
-                for value in values {
-                    if (value == "file") {
-                        // handle file name
-                        var filenameValue: AnyObject? = map["SWLLocationFilename"]
-                        if let filename: AnyObject = filenameValue {
-                            let fileLocation = getConfiguredFileLocation(configuration, item: filename);
-                            if fileLocation != nil {
-                                results += [fileLocation!]
-                            }
+                                map: Dictionary<String, AnyObject>) -> [LogLocation] {
+        var results = [LogLocation]()
+        if let configuredValue: String = item as? String {
+            // configuredValue is the raw value in the plist
+            
+            // values is the array from configuredValue
+            let values = configuredValue.lowercaseString.componentsSeparatedByCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            
+            for value in values {
+                if (value == "file") {
+                    // handle file name
+                    let filenameValue: AnyObject? = map["SWLLocationFilename"]
+                    if let filename: AnyObject = filenameValue {
+                        let fileLocation = getConfiguredFileLocation(configuration, item: filename);
+                        if fileLocation != nil {
+                            results += [fileLocation!]
                         }
-                    } else if (value == "console") {
-                        results += [ConsoleLocation.getInstance()]
-                    } else {
-                        println("Unrecognized location value in Swell.plist: '\(value)'")
                     }
+                } else if (value == "console") {
+                    results += [ConsoleLocation.getInstance()]
+                } else {
+                    print("Unrecognized location value in Swell.plist: '\(value)'")
                 }
             }
-            return results
+        }
+        return results
     }
     
+    func getConfiguredDateFormatter(item: AnyObject) -> NSDateFormatter {
+        let dateFormatter = NSDateFormatter()
+        if let formatString = item as? String {
+            dateFormatter.dateFormat = formatString
+        }
+        return dateFormatter
+    }
+    
+    //    if ((key.hasPrefix("SWL")) && (key.hasSuffix("Format"))) {
+    //    let start = advance(key.startIndex, 3)
+    //    let end = advance(key.endIndex, -6)
+    //    let result: String = key[start..<end]
+    //    //println("result=\(result)")
+    //    return result
+    //    }
+    
+    
     func getFormatKey(map: Dictionary<String, AnyObject>) -> String? {
-        for (key, value) in map {
+        for (key, _) in map {
             if ((key.hasPrefix("SWL")) && (key.hasSuffix("Format"))) {
-                let start = advance(key.startIndex, 3)
-                let end = advance(key.endIndex, -6)
+                let start = key.startIndex.advancedBy(3)
+                let end = key.endIndex.advancedBy(-6)
                 let result: String = key[start..<end]
+                print("result=\(result)")
                 return result
             }
         }
@@ -496,9 +568,9 @@ public class Swell {
     func getFunctionFormat(function: String) -> String {
         var result = function;
         if (result.hasPrefix("Optional(")) {
-            let len = count("Optional(")
-            let start = advance(result.startIndex, len)
-            let end = advance(result.endIndex, -len)
+            let len = "Optional(".characters.count
+            let start = result.startIndex.advancedBy(len)
+            let end = result.endIndex.advancedBy(-len)
             let range = start..<end
             result = result[range]
         }
