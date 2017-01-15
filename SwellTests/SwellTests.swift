@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import Swell
 
-public class SwellTestLocation: LogLocation {
+open class SwellTestLocation: LogLocation {
     var logged: Bool = false
     var _message: String?
     func wasLogged() -> Bool {
@@ -18,15 +18,15 @@ public class SwellTestLocation: LogLocation {
         logged = false
         return result
     }
-    public func log(@autoclosure message: () -> String) {
+    open func log(_ message: @autoclosure () -> String) {
         logged = true
         _message = message()
         //println(message)
     }
     
-    public func enable() {}
-    public func disable() {}
-    public func description() -> String {
+    open func enable() {}
+    open func disable() {}
+    open func description() -> String {
         return "SwellTestLocation"
     }
 }
@@ -49,7 +49,7 @@ class SwellTests: XCTestCase {
         //var d = Swell.dummy
         let location = SwellTestLocation()
         
-        let logger = Logger(name: "TestLevel", level:.INFO, formatter: QuickFormatter(format: .MessageOnly), logLocation: location)
+        let logger = Logger(name: "TestLevel", level:.INFO, formatter: QuickFormatter(format: .messageOnly), logLocation: location)
         
         logger.trace("Hello trace level");
         if location._message != nil {
@@ -94,7 +94,7 @@ class SwellTests: XCTestCase {
             XCTFail("Should have logged ERROR call")
         }
         
-        let date = NSDate()
+        let date = Date()
         logger.error(date);
         if let message = location._message {
             XCTAssertEqual(date.description, message, "Pass")
@@ -135,7 +135,7 @@ class SwellTests: XCTestCase {
         logger.error("Hello error level");
         logger.severe("Hello severe level");
         logger.error(0);
-        logger.error(NSDate());
+        logger.error(Date());
         logger.error(12.234);
         let customLevel = LogLevel(level: 450, name: "custom", label: "CUSTOM");
         logger.log(customLevel, message: [0, 0, 1]);
@@ -153,7 +153,7 @@ class SwellTests: XCTestCase {
         Swell.error("Hello error level");
         Swell.severe("Hello severe level");
         Swell.error(0);
-        Swell.error(NSDate());
+        Swell.error(Date());
         Swell.error(12.234);
         //XCTAssert(true, "Pass")
         
@@ -173,7 +173,7 @@ class SwellTests: XCTestCase {
         logger.severe("Hello severe level");
         logger.severe("Hello SwellTester level");
         logger.error(0);
-        logger.error(NSDate());
+        logger.error(Date());
         logger.error(12.234);
         let customLevel = LogLevel(level: 450, name: "custom", label: "CUSTOM");
         logger.log(customLevel, message: [0, 0, 1]);
@@ -225,7 +225,7 @@ class SwellTests: XCTestCase {
         logger.severe("Hello severe level");
         logger.severe("Hello SwellTester level");
         logger.error(0);
-        logger.error(NSDate());
+        logger.error(Date());
         logger.error(12.234);
         let customLevel = LogLevel(level: 450, name: "custom", label: "CUSTOM");
         logger.log(customLevel, message: [0, 0, 1]);
@@ -287,7 +287,7 @@ class SwellTests: XCTestCase {
         logger.errorMessage("Hello error level");
         logger.severeMessage("Hello severe level");
         logger.errorMessage("\(0)");
-        logger.errorMessage("\(NSDate())");
+        logger.errorMessage("\(Date())");
         logger.errorMessage("\(12.234)");
         XCTAssert(true, "Pass")
     
@@ -315,7 +315,7 @@ class SwellTests: XCTestCase {
     
     func testFlexFormatter() {
         let location = SwellTestLocation()
-        var formatter = FlexFormatter(parts: .NAME, .MESSAGE)
+        var formatter = FlexFormatter(parts: .name, .message)
         
         let logger = Logger(name: "TestFlexFormatter", level:.INFO, formatter: formatter, logLocation: location)
         logger.info("Log this")
@@ -328,7 +328,7 @@ class SwellTests: XCTestCase {
         }
 
         //formatter.format = [.LEVEL, .NAME, .MESSAGE]
-        formatter = FlexFormatter(parts: .LEVEL, .NAME, .MESSAGE)
+        formatter = FlexFormatter(parts: .level, .name, .message)
         logger.formatter = formatter
         logger.warn("Warn of this")
         if let message = location._message {
@@ -339,7 +339,7 @@ class SwellTests: XCTestCase {
         print("Formatter \(formatter.description())", terminator: "")
         
         //formatter.format = [.MESSAGE, .LEVEL, .NAME]
-        formatter = FlexFormatter(parts: .MESSAGE, .LEVEL, .NAME)
+        formatter = FlexFormatter(parts: .message, .level, .name)
         logger.formatter = formatter
         logger.warn("Warn of this")
         if let message = location._message {
@@ -348,7 +348,7 @@ class SwellTests: XCTestCase {
             XCTFail("Fail")
         }
         
-        formatter = FlexFormatter(parts: .MESSAGE, .LEVEL, .FUNC)
+        formatter = FlexFormatter(parts: .message, .level, .func)
         logger.formatter = formatter
         logger.warn("Warn of this")
         if let message = location._message {
@@ -364,11 +364,11 @@ class SwellTests: XCTestCase {
     func testFlexPerformance() {
         // This is an example of a performance test case.
         let location = SwellTestLocation()
-        let formatter = FlexFormatter(parts: .LEVEL, .NAME, .MESSAGE)
+        let formatter = FlexFormatter(parts: .level, .name, .message)
         
         let logger = Logger(name: "TestFlexPerformance", level:.INFO, formatter: formatter, logLocation: location)
 
-        self.measureBlock() {
+        self.measure() {
             // Put the code you want to measure the time of here.
             for _ in 1...5000 {
                 logger.info("This is my message")
@@ -379,11 +379,11 @@ class SwellTests: XCTestCase {
     func testFlexSlowestPerformance() {
         // This is an example of a performance test case.
         let location = SwellTestLocation()
-        let formatter = FlexFormatter(parts: .DATE, .LEVEL, .NAME, .MESSAGE)
+        let formatter = FlexFormatter(parts: .date, .level, .name, .message)
         
         let logger = Logger(name: "TestFlexPerformance", level:.INFO, formatter: formatter, logLocation: location)
         
-        self.measureBlock() {
+        self.measure() {
             // Put the code you want to measure the time of here.
             for _ in 1...5000 {
                 logger.info("This is my message")
@@ -394,11 +394,11 @@ class SwellTests: XCTestCase {
     func testQuickPerformance() {
         // This is an example of a performance test case.
         let location = SwellTestLocation()
-        let formatter = QuickFormatter(format: .LevelNameMessage)
+        let formatter = QuickFormatter(format: .levelNameMessage)
         
         let logger = Logger(name: "TestQuickPerformance", level:.INFO, formatter: formatter, logLocation: location)
         
-        self.measureBlock() {
+        self.measure() {
             // Put the code you want to measure the time of here.
             for _ in 1...5000 {
                 logger.info("This is my message")
@@ -409,11 +409,11 @@ class SwellTests: XCTestCase {
     func testQuickSlowestPerformance() {
         // This is an example of a performance test case.
         let location = SwellTestLocation()
-        let formatter = QuickFormatter(format: .All)
+        let formatter = QuickFormatter(format: .all)
         
         let logger = Logger(name: "TestQuickPerformance", level:.INFO, formatter: formatter, logLocation: location)
         
-        self.measureBlock() {
+        self.measure() {
             // Put the code you want to measure the time of here.
             for _ in 1...5000 {
                 logger.info("This is my message")

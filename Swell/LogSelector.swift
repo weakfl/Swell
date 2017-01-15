@@ -13,32 +13,32 @@
 ///  * If a logger is specifically disabled, then that rule will be followed regardless of whether it was enabled by another rule
 ///  * If any one logger is specifically enabled, then all other loggers must be specifically enabled, too,
 ///    otherwise they wouldn't be enabled
-public class LogSelector {
+open class LogSelector {
     
-    public var enableRule: String = "" {
+    open var enableRule: String = "" {
         didSet {
             enabled = parseCSV(enableRule)
         }
     }
-    public var disableRule: String = "" {
+    open var disableRule: String = "" {
         didSet {
             disabled = parseCSV(disableRule)
         }
     }
     
-    public var enabled: [String] = [String]()
-    public var disabled: [String] = [String]()
+    open var enabled: [String] = [String]()
+    open var disabled: [String] = [String]()
     
     public init() {
         
     }
     
-    func shouldEnable(logger: Logger) -> Bool {
+    func shouldEnable(_ logger: Logger) -> Bool {
         let name = logger.name
         return shouldEnableLoggerWithName(name)
     }
     
-    public func shouldEnableLoggerWithName(name: String) -> Bool {
+    open func shouldEnableLoggerWithName(_ name: String) -> Bool {
         // If the default rules are in place, then yes
         if disableRule == "" && enableRule == "" {
             return true
@@ -69,7 +69,7 @@ public class LogSelector {
     }
     
     /// Returns true if the given logger name was specifically configured to be disabled
-    func isLoggerEnabled(name: String) -> Bool {
+    func isLoggerEnabled(_ name: String) -> Bool {
         for enabledName in enabled {
             if (name == enabledName) {
                 return true
@@ -80,7 +80,7 @@ public class LogSelector {
     }
     
     /// Returns true if the given logger name was specifically configured to be disabled
-    func isLoggerDisabled(name: String) -> Bool {
+    func isLoggerDisabled(_ name: String) -> Bool {
         for disabledName in disabled {
             if (name == disabledName) {
                 return true
@@ -91,9 +91,9 @@ public class LogSelector {
     }
     
     
-    func parseCSV(string: String) -> [String] {
+    func parseCSV(_ string: String) -> [String] {
         var result = [String]()
-        let temp = string.componentsSeparatedByString(",")
+        let temp = string.components(separatedBy: ",")
         for s: String in temp {
             // 'countElements(s)' returns s.length
             if (s.characters.count > 0) {

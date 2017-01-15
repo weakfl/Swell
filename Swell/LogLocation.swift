@@ -10,7 +10,7 @@ import Foundation
 public protocol LogLocation {
     //class func getInstance(param: AnyObject? = nil) -> LogLocation
     
-    func log(@autoclosure message: () -> String);
+    func log(_ message: @autoclosure () -> String);
     
     func enable();
     
@@ -21,7 +21,7 @@ public protocol LogLocation {
 
 
 
-public class ConsoleLocation: LogLocation {
+open class ConsoleLocation: LogLocation {
     var enabled = true
     
     // Use the static-inside-class-var approach to getting a class var instance
@@ -32,25 +32,25 @@ public class ConsoleLocation: LogLocation {
         return Static.internalInstance
     }
     
-    public class func getInstance() -> LogLocation {
+    open class func getInstance() -> LogLocation {
         return instance
     }
     
-    public func log(@autoclosure message: () -> String) {
+    open func log(_ message: @autoclosure () -> String) {
         if enabled {
             NSLog("%@", message())
         }
     }
     
-    public func enable() {
+    open func enable() {
         enabled = true
     }
     
-    public func disable() {
+    open func disable() {
         enabled = false
     }
     
-    public func description() -> String {
+    open func description() -> String {
         return "ConsoleLocation"
     }
 }
@@ -58,12 +58,12 @@ public class ConsoleLocation: LogLocation {
 // Use the globally-defined-var approach to getting a class var dictionary
 var internalFileLocationDictionary = Dictionary<String, FileLocation>()
 
-public class FileLocation: LogLocation {
+open class FileLocation: LogLocation {
     var enabled = true
     var filename: String
-    var fileHandle: NSFileHandle?
+    var fileHandle: FileHandle?
     
-    public class func getInstance(filename: String) -> LogLocation {
+    open class func getInstance(_ filename: String) -> LogLocation {
         let temp = internalFileLocationDictionary[filename]
         if let result = temp {
             return result
@@ -86,7 +86,7 @@ public class FileLocation: LogLocation {
         closeFile()
     }
     
-    public func log(@autoclosure message: () -> String) {
+    open func log(_ message: @autoclosure () -> String) {
         //message.writeToFile(filename, atomically: false, encoding: NSUTF8StringEncoding, error: nil);
         if (!enabled) {
             return
@@ -95,30 +95,30 @@ public class FileLocation: LogLocation {
         let output = message() + "\n"
         if let handle = fileHandle {
             handle.seekToEndOfFile()
-            if let data = output.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                handle.writeData(data)
+            if let data = output.data(using: String.Encoding.utf8, allowLossyConversion: false) {
+                handle.write(data)
             }
         }
         
     }
     
     func setDirectory() {
-        let temp: NSString = self.filename
-        if temp.rangeOfString("/").location != Foundation.NSNotFound {
+        let temp: NSString = self.filename as NSString
+        if temp.range(of: "/").location != Foundation.NSNotFound {
             // "/" was found in the filename, so we use whatever path is already there
             if (self.filename.hasPrefix("~/")) {
-                self.filename = (self.filename as NSString).stringByExpandingTildeInPath
+                self.filename = (self.filename as NSString).expandingTildeInPath
             }
             
             return
         }
         
         //let dirs : [String]? = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true) as? [String]
-        let dirs:AnyObject = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let dirs:AnyObject = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as AnyObject
         
         if let dir: String = dirs as? String {
             //let dir = directories[0]; //documents directory
-            let path = (dir as NSString).stringByAppendingPathComponent(self.filename)
+            let path = (dir as NSString).appendingPathComponent(self.filename)
             self.filename = path;
         }
     }
@@ -126,10 +126,10 @@ public class FileLocation: LogLocation {
     func openFile() {
         // open our file
         //Swell.info("Opening \(self.filename)")
-        if !NSFileManager.defaultManager().fileExistsAtPath(self.filename) {
-            NSFileManager.defaultManager().createFileAtPath(self.filename, contents: nil, attributes: nil)
+        if !FileManager.default.fileExists(atPath: self.filename) {
+            FileManager.default.createFile(atPath: self.filename, contents: nil, attributes: nil)
         }
-        fileHandle = NSFileHandle(forWritingAtPath:self.filename);
+        fileHandle = FileHandle(forWritingAtPath:self.filename);
         //Swell.debug("fileHandle is now \(fileHandle)")
     }
     
@@ -141,15 +141,15 @@ public class FileLocation: LogLocation {
         fileHandle = nil
     }
     
-    public func enable() {
+    open func enable() {
         enabled = true
     }
     
-    public func disable() {
+    open func disable() {
         enabled = false
     }
     
-    public func description() -> String {
+    open func description() -> String {
         return "FileLocation filename=\(filename)"
     }
 }
