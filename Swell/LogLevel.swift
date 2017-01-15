@@ -40,14 +40,14 @@ public struct LogLevel {
         self.label = label
     }
     
-    static func create(level: PredefinedLevel, name: String, label: String) -> LogLevel {
+    static func create(_ level: PredefinedLevel, name: String, label: String) -> LogLevel {
         let result = LogLevel(level:level.rawValue, name: name, label: label);
         //let key =
         allLevels[result.level] = result
         return result
     }
     
-    public static func getLevel(level: PredefinedLevel) -> LogLevel {
+    public static func getLevel(_ level: PredefinedLevel) -> LogLevel {
         switch level {
         case .trace:  return TRACE
         case .debug:  return DEBUG
@@ -58,7 +58,7 @@ public struct LogLevel {
         }
     }
     
-    static func getLevel(levelName: String) -> LogLevel {
+    static func getLevel(_ levelName: String) -> LogLevel {
         // we access all levels to make sure they've all been initialized
         for level in allLevels.values {
             if (level.name == levelName) {

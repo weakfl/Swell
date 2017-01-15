@@ -8,11 +8,11 @@
 
 
 
-public class Logger {
+open class Logger {
     
     let name: String
-    public var level: LogLevel
-    public var formatter: LogFormatter
+    open var level: LogLevel
+    open var formatter: LogFormatter
     var locations: [LogLocation]
     var enabled: Bool;
     
@@ -32,8 +32,8 @@ public class Logger {
     }
     
     
-    public func log<T>(logLevel: LogLevel,
-                    @autoclosure message: () -> T,
+    open func log<T>(_ logLevel: LogLevel,
+                    message: @autoclosure () -> T,
                                  filename: String? = #file, line: Int? = #line,  function: String? = #function) {
         if (self.enabled) && (logLevel.level >= level.level) {
             let logMessage = formatter.formatLog(self, level: logLevel, message: message,
@@ -48,97 +48,97 @@ public class Logger {
     //**********************************************************************
     // Main log methods
     
-    public func trace<T>(@autoclosure message: () -> T,
+    open func trace<T>(_ message: @autoclosure () -> T,
                       filename: String? = #file, line: Int? = #line,  function: String? = #function) {
-        self.log(.TRACE, message: message, filename: filename, line: line, function: function)
+        self.log(.TRACE, filename: filename, line: line, function: function, fn: message)
     }
     
-    public func debug<T>(@autoclosure message: () -> T,
+    open func debug<T>(_ message: @autoclosure () -> T,
                       filename: String? = #file, line: Int? = #line,  function: String? = #function) {
-        self.log(.DEBUG, message: message, filename: filename, line: line, function: function)
+        self.log(.DEBUG, filename: filename, line: line, function: function, fn: message)
     }
     
-    public func info<T>(@autoclosure message: () -> T,
+    open func info<T>(_ message: @autoclosure () -> T,
                      filename: String? = #file, line: Int? = #line,  function: String? = #function) {
-        self.log(.INFO, message: message, filename: filename, line: line, function: function)
+        self.log(.INFO, filename: filename, line: line, function: function, fn: message)
     }
     
-    public func warn<T>(@autoclosure message: () -> T,
+    open func warn<T>(_ message: @autoclosure () -> T,
                      filename: String? = #file, line: Int? = #line,  function: String? = #function) {
-        self.log(.WARN, message: message, filename: filename, line: line, function: function)
+        self.log(.WARN, filename: filename, line: line, function: function, fn: message)
     }
     
-    public func error<T>(@autoclosure message: () -> T,
+    open func error<T>(_ message: @autoclosure () -> T,
                       filename: String? = #file, line: Int? = #line,  function: String? = #function) {
-        self.log(.ERROR, message: message, filename: filename, line: line, function: function)
+        self.log(.ERROR, filename: filename, line: line, function: function, fn: message)
     }
     
-    public func severe<T>(@autoclosure message: () -> T,
+    open func severe<T>(_ message: @autoclosure () -> T,
                        filename: String? = #file, line: Int? = #line,  function: String? = #function) {
-        self.log(.SEVERE, message: message, filename: filename, line: line, function: function)
+        self.log(.SEVERE, filename: filename, line: line, function: function, fn: message)
     }
     
     //*****************************************************************************************
     // Log methods that accepts closures - closures must accept no param and return a String
     
-    public func log(logLevel: LogLevel,
-                    filename: String? = #file, line: Int? = #line,  function: String? = #function,fn: () -> String) {
+    open func log<T>(_ logLevel: LogLevel,
+                    filename: String? = #file, line: Int? = #line,  function: String? = #function,fn: () -> T) {
         
         if (self.enabled) && (logLevel.level >= level.level) {
             let message = fn()
-            self.log(logLevel, message: message)
+            self.log(logLevel, message: message, filename: filename, line: line, function: function)
         }
     }
     
-    public func trace(filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
+    open func trace(_ filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
         log(.TRACE, filename: filename, line: line, function: function, fn: fn)
     }
     
-    public func debug(filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
+    open func debug(_ filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
         log(.DEBUG, filename: filename, line: line, function: function, fn: fn)
     }
     
-    public func info(filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
+    open func info(_ filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
         log(.INFO, filename: filename, line: line, function: function, fn: fn)
     }
     
-    public func warn(filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
+    open func warn(_ filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
         log(.WARN, filename: filename, line: line, function: function, fn: fn)
     }
     
-    public func error(filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
+    open func error(_ filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
         log(.ERROR, filename: filename, line: line, function: function, fn: fn)
     }
     
-    public func severe(filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
+    open func severe(_ filename: String? = #file, line: Int? = #line,  function: String? = #function, fn: () -> String) {
         log(.SEVERE, filename: filename, line: line, function: function, fn: fn)
     }
     
-    public class func getLogger(name: String) -> Logger {
+    open class func getLogger(_ name: String) -> Logger {
         return Logger(name: name);
     }
     
-    public func traceMessage(message: String) {
+    open func traceMessage(_ message: String) {
         self.trace(message, filename: nil, line: nil, function: nil);
     }
     
-    public func debugMessage(message: String) {
+    open func debugMessage(_ message: String) {
         self.debug(message, filename: nil, line: nil, function: nil);
     }
     
-    public func infoMessage(message: String) {
+    open func infoMessage(_ message: String) {
         self.info(message, filename: nil, line: nil, function: nil);
     }
     
-    public func warnMessage(message: String) {
+    open func warnMessage(_ message: String) {
         self.warn(message, filename: nil, line: nil, function: nil);
     }
     
-    public func errorMessage(message: String) {
+    open func errorMessage(_ message: String) {
         self.error(message, filename: nil, line: nil, function: nil);
     }
     
-    public func severeMessage(message: String) {
+    open func severeMessage(_ message: String) {
         self.severe(message, filename: nil, line: nil, function: nil);
     }
 }
