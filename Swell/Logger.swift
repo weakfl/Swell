@@ -81,12 +81,12 @@ open class Logger {
     //*****************************************************************************************
     // Log methods that accepts closures - closures must accept no param and return a String
     
-    open func log(_ logLevel: LogLevel,
-                    filename: String? = #file, line: Int? = #line,  function: String? = #function,fn: () -> String) {
+    open func log<T>(_ logLevel: LogLevel,
+                    filename: String? = #file, line: Int? = #line,  function: String? = #function,fn: () -> T) {
         
         if (self.enabled) && (logLevel.level >= level.level) {
             let message = fn()
-            self.log(logLevel, message: message)
+            self.log(logLevel, message: message, filename: filename, line: line, function: function)
         }
     }
     

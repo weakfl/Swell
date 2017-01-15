@@ -6,31 +6,6 @@
 //  Copyright (c) 2014 Minute Apps LLC. All rights reserved.
 //
 import Foundation
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
-
 
 struct LoggerConfiguration {
     var name: String
@@ -82,12 +57,12 @@ open class Swell {
         /**
          We'll just make sure to create every log level
          */
-        LogLevel.DEBUG
-        LogLevel.INFO
-        LogLevel.TRACE
-        LogLevel.WARN
-        LogLevel.ERROR
-        LogLevel.SEVERE
+        _ = LogLevel.DEBUG
+        _ = LogLevel.INFO
+        _ = LogLevel.TRACE
+        _ = LogLevel.WARN
+        _ = LogLevel.ERROR
+        _ = LogLevel.SEVERE
         
         readConfigurationFile()
     }
@@ -426,7 +401,7 @@ open class Swell {
         
         if let location = givenLocation {
             newConfiguration.locations += [location]
-        } else if oldConfiguration?.locations.count > 0 {
+        } else if let count = oldConfiguration?.locations.count, count > 0 {
             newConfiguration.locations = oldConfiguration!.locations
         }
         
