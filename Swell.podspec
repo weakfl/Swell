@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Swell"
   s.summary          = "A logging utility for Swift and Objective C."
-  s.version          = "0.5.3"
+  s.version          = "0.5.4"
   s.homepage         = "https://github.com/hubertr/Swell"
   s.license          = 'Apache'
   s.author           = { "Hubert Rabago" => "undetected2@gmail.com" }

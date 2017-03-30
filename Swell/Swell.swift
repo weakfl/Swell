@@ -22,7 +22,7 @@ struct LoggerConfiguration {
         for loc in locations {
             locationsDesc += loc.description()
         }
-        return "\(name) \(level?.desciption()) \(formatter?.description()) \(locationsDesc)"
+        return "\(name) \(String(describing: level?.desciption())) \(String(describing: formatter?.description())) \(locationsDesc)"
     }
 }
 
@@ -459,7 +459,7 @@ open class Swell {
                 configuration.formatter = getConfiguredFlexFormatter(configuration, item: value);
             } else {
                 let formatKey = getFormatKey(map)
-                print("formatKey=\(formatKey)")
+                print("formatKey=\(String(describing: formatKey))")
             }
         }
         
