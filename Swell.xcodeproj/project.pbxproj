@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		937D82AC1F3DCC14007E0710 /* Swell_watchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 937D82AA1F3DCC14007E0710 /* Swell_watchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		937D82B01F3DCD2B007E0710 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF4B77A2195531DD009E47AB /* Formatter.swift */; };
+		937D82B11F3DCD2B007E0710 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0A05701954EC9A00E35A15 /* Logger.swift */; };
+		937D82B21F3DCD2B007E0710 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0A05721954EDD700E35A15 /* LogLevel.swift */; };
+		937D82B31F3DCD2B007E0710 /* LogLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF65B8F3195C3ECB00F98E0C /* LogLocation.swift */; };
+		937D82B41F3DCD2B007E0710 /* LogSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF65B8F51963978300F98E0C /* LogSelector.swift */; };
+		937D82B51F3DCD2B007E0710 /* Swell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF65B8F1195C3CFF00F98E0C /* Swell.swift */; };
 		DF0A055A1954EC4800E35A15 /* Swell.h in Headers */ = {isa = PBXBuildFile; fileRef = DF0A05591954EC4800E35A15 /* Swell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DF0A05601954EC4800E35A15 /* Swell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF0A05541954EC4800E35A15 /* Swell.framework */; };
 		DF0A05671954EC4800E35A15 /* SwellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0A05661954EC4800E35A15 /* SwellTests.swift */; };
@@ -72,6 +79,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		937D82A81F3DCC14007E0710 /* Swell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		937D82AA1F3DCC14007E0710 /* Swell_watchOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swell_watchOS.h; sourceTree = "<group>"; };
+		937D82AB1F3DCC14007E0710 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF0A05541954EC4800E35A15 /* Swell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF0A05581954EC4800E35A15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF0A05591954EC4800E35A15 /* Swell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Swell.h; sourceTree = "<group>"; };
@@ -88,6 +98,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		937D82A41F3DCC14007E0710 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DF0A05501954EC4800E35A15 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -107,11 +124,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		937D82A91F3DCC14007E0710 /* Swell_watchOS */ = {
+			isa = PBXGroup;
+			children = (
+				937D82AA1F3DCC14007E0710 /* Swell_watchOS.h */,
+				937D82AB1F3DCC14007E0710 /* Info.plist */,
+			);
+			path = Swell_watchOS;
+			sourceTree = "<group>";
+		};
 		DF0A054A1954EC4800E35A15 = {
 			isa = PBXGroup;
 			children = (
 				DF0A05561954EC4800E35A15 /* Swell */,
 				DF0A05631954EC4800E35A15 /* SwellTests */,
+				937D82A91F3DCC14007E0710 /* Swell_watchOS */,
 				FA5B932A1AFCBE4B00402C5A /* Frameworks */,
 				DF0A05551954EC4800E35A15 /* Products */,
 			);
@@ -122,6 +149,7 @@
 			children = (
 				DF0A05541954EC4800E35A15 /* Swell.framework */,
 				DF0A055F1954EC4800E35A15 /* SwellTests.xctest */,
+				937D82A81F3DCC14007E0710 /* Swell.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -177,6 +205,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		937D82A51F3DCC14007E0710 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				937D82AC1F3DCC14007E0710 /* Swell_watchOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DF0A05511954EC4800E35A15 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -188,6 +224,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		937D82A71F3DCC14007E0710 /* Swell_watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 937D82AF1F3DCC14007E0710 /* Build configuration list for PBXNativeTarget "Swell_watchOS" */;
+			buildPhases = (
+				937D82A31F3DCC14007E0710 /* Sources */,
+				937D82A41F3DCC14007E0710 /* Frameworks */,
+				937D82A51F3DCC14007E0710 /* Headers */,
+				937D82A61F3DCC14007E0710 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Swell_watchOS;
+			productName = Swell_watchOS;
+			productReference = 937D82A81F3DCC14007E0710 /* Swell.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		DF0A05531954EC4800E35A15 /* Swell */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DF0A056A1954EC4800E35A15 /* Build configuration list for PBXNativeTarget "Swell" */;
@@ -241,6 +295,10 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Minute Apps LLC";
 				TargetAttributes = {
+					937D82A71F3DCC14007E0710 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
 					DF0A05531954EC4800E35A15 = {
 						CreatedOnToolsVersion = 6.0;
 						LastSwiftMigration = 0820;
@@ -266,11 +324,19 @@
 			targets = (
 				DF0A05531954EC4800E35A15 /* Swell */,
 				DF0A055E1954EC4800E35A15 /* SwellTests */,
+				937D82A71F3DCC14007E0710 /* Swell_watchOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		937D82A61F3DCC14007E0710 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DF0A05521954EC4800E35A15 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,6 +354,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		937D82A31F3DCC14007E0710 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				937D82B01F3DCD2B007E0710 /* Formatter.swift in Sources */,
+				937D82B21F3DCD2B007E0710 /* LogLevel.swift in Sources */,
+				937D82B41F3DCD2B007E0710 /* LogSelector.swift in Sources */,
+				937D82B11F3DCD2B007E0710 /* Logger.swift in Sources */,
+				937D82B31F3DCD2B007E0710 /* LogLocation.swift in Sources */,
+				937D82B51F3DCD2B007E0710 /* Swell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DF0A054F1954EC4800E35A15 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -350,6 +429,64 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		937D82AD1F3DCC14007E0710 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Swell_watchOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.minuteapps.Swell;
+				PRODUCT_MODULE_NAME = Swell;
+				PRODUCT_NAME = Swell;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		937D82AE1F3DCC14007E0710 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Swell_watchOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.minuteapps.Swell;
+				PRODUCT_MODULE_NAME = Swell;
+				PRODUCT_NAME = Swell;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		DF0A05681954EC4800E35A15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -519,6 +656,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		937D82AF1F3DCC14007E0710 /* Build configuration list for PBXNativeTarget "Swell_watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				937D82AD1F3DCC14007E0710 /* Debug */,
+				937D82AE1F3DCC14007E0710 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		DF0A054E1954EC4800E35A15 /* Build configuration list for PBXProject "Swell" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
