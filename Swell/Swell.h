@@ -6,11 +6,7 @@
 //  Copyright (c) 2014 Minute Apps LLC. All rights reserved.
 //
 
-#ifdef TARGET_OS_IPHONE
-#import <UIKit/UIKit.h>
-#else
 #import <Foundation/Foundation.h>
-#endif
 
 //! Project version number for Swell.
 FOUNDATION_EXPORT double SwellVersionNumber;
