@@ -554,7 +554,7 @@ open class Swell {
             if ((key.hasPrefix("SWL")) && (key.hasSuffix("Format"))) {
                 let start = key.characters.index(key.startIndex, offsetBy: 3)
                 let end = key.characters.index(key.endIndex, offsetBy: -6)
-                let result: String = key[start..<end]
+                let result: String = String(key[start..<end])
                 print("result=\(result)")
                 return result
             }
@@ -571,7 +571,7 @@ open class Swell {
             let start = result.characters.index(result.startIndex, offsetBy: len)
             let end = result.characters.index(result.endIndex, offsetBy: -len)
             let range = start..<end
-            result = result[range]
+            result = String(result[range])
         }
         if (!result.hasSuffix(")")) {
             result = result + "()"
