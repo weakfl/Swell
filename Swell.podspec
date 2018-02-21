@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "Swell"
   s.summary          = "A logging utility for Swift and Objective C."
-  s.version          = "0.5.6"
+  s.version          = "0.5.7"
   s.homepage         = "https://github.com/hubertr/Swell"
   s.license          = 'Apache'
   s.author           = { "Hubert Rabago" => "undetected2@gmail.com" }
@@ -9,5 +9,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.watchos.deployment_target = '2.0'
   s.requires_arc     = true
+  s.swift_version    = '4.0'
   s.source_files     = 'Swell/**/*.{h,swift,plist}'
 end

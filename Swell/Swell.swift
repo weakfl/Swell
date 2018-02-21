@@ -552,8 +552,8 @@ open class Swell {
     func getFormatKey(_ map: Dictionary<String, AnyObject>) -> String? {
         for (key, _) in map {
             if ((key.hasPrefix("SWL")) && (key.hasSuffix("Format"))) {
-                let start = key.characters.index(key.startIndex, offsetBy: 3)
-                let end = key.characters.index(key.endIndex, offsetBy: -6)
+                let start = key.index(key.startIndex, offsetBy: 3)
+                let end = key.index(key.endIndex, offsetBy: -6)
                 let result: String = String(key[start..<end])
                 print("result=\(result)")
                 return result
@@ -567,9 +567,9 @@ open class Swell {
     func getFunctionFormat(_ function: String) -> String {
         var result = function;
         if (result.hasPrefix("Optional(")) {
-            let len = "Optional(".characters.count
-            let start = result.characters.index(result.startIndex, offsetBy: len)
-            let end = result.characters.index(result.endIndex, offsetBy: -len)
+            let len = "Optional(".count
+            let start = result.index(result.startIndex, offsetBy: len)
+            let end = result.index(result.endIndex, offsetBy: -len)
             let range = start..<end
             result = String(result[range])
         }

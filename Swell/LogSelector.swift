@@ -96,7 +96,7 @@ open class LogSelector {
         let temp = string.components(separatedBy: ",")
         for s: String in temp {
             // 'countElements(s)' returns s.length
-            if (s.characters.count > 0) {
+            if (s.count > 0) {
                 result.append(s)
             }
             //if (s.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
