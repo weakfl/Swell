@@ -82,42 +82,42 @@ open class Swell {
         if globalSwell.swellLogger == nil {
             globalSwell.initInternalLogger()
         }
-        globalSwell.swellLogger.trace(message)
+        globalSwell.swellLogger.trace(message())
     }
     
     open class func debug<T>(_ message: @autoclosure () -> T) {
         if globalSwell.swellLogger == nil {
             globalSwell.initInternalLogger()
         }
-        globalSwell.swellLogger.debug(message)
+        globalSwell.swellLogger.debug(message())
     }
     
     open class func info<T>(_ message: @autoclosure () -> T) {
         if globalSwell.swellLogger == nil {
             globalSwell.initInternalLogger()
         }
-        globalSwell.swellLogger.info(message)
+        globalSwell.swellLogger.info(message())
     }
     
     open class func warn<T>(_ message: @autoclosure () -> T) {
         if globalSwell.swellLogger == nil {
             globalSwell.initInternalLogger()
         }
-        globalSwell.swellLogger.warn(message)
+        globalSwell.swellLogger.warn(message())
     }
     
     open class func error<T>(_ message: @autoclosure () -> T) {
         if globalSwell.swellLogger == nil {
             globalSwell.initInternalLogger()
         }
-        globalSwell.swellLogger.error(message)
+        globalSwell.swellLogger.error(message())
     }
     
     open class func severe<T>(_ message: @autoclosure () -> T) {
         if globalSwell.swellLogger == nil {
             globalSwell.initInternalLogger()
         }
-        globalSwell.swellLogger.severe(message)
+        globalSwell.swellLogger.severe(message())
     }
     
     open class func trace(_ fn: () -> String) {

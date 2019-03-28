@@ -36,7 +36,7 @@ open class Logger {
                     message: @autoclosure () -> T,
                                  filename: String? = #file, line: Int? = #line,  function: String? = #function) {
         if (self.enabled) && (logLevel.level >= level.level) {
-            let logMessage = formatter.formatLog(self, level: logLevel, message: message,
+            let logMessage = formatter.formatLog(self, level: logLevel, message: message(),
                                                  filename: filename, line: line, function: function);
             for location in locations {
                 location.log(logMessage)
